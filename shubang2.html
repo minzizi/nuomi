@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    window.onload=function(){
+        'use strict';
+        function Observer(data){
+            this.data=data;
+            this.walk(data);
+            this.eventsBus=new Event();
+        }
+        let p=Observer.prototype;
+        p.walk=function(obj){
+            let val;
+            for(let key in obj){
+                if(obj.hasOwnProperty(key)){
+                    val=obj[key];
+                    // 这里进行判断，如果还没有遍历到最底层，继续new Observer
+                    if(typeof val==='objet'){
+                        new Observer(val);
+                    }
+                    this.convert(key,val);
+                }
+            }
+        };
+        p.convert=function(key,val){
+            let _this=this;
+            Object.defineProperty(this.data,key,{
+                enumerable:true,
+                configurable:true,
+                get:function(){
+                    console.log('你访问了'+key);
+                    console.log(val);
+                    return val;
+                },
+                set:function(newVal){
+                    console.log('你设置了'+key);
+                    console.log('新的'+key+'='+newVal);
+                    //出发$watch函数
+                    _this.eventsBus.emit(key,val,newVal);
+                    if(newVal===val)return;
+                    val=newVal;
+                    //如果newval是对象的话
+                    if(typeof newVal === 'object'){
+                        new Observer(val);
+                    }
+                }
+            })
+        };
+        Observer.prototype.$watch=function(attr,callback){
+            this.eventsBus.on(attr,callback);
+        }
+        //实现监听事件
+        function Event(){
+            this.events={};
+        }
+        Event.prototype.on=function(attr,callback){
+            if(this.events[attr]){
+                this.events[attr].push(callback);
+            }else{
+                this.events[attr]=[callback];
+            }
+        }
+        Event.prototype.off=function(attr){
+            for(let key in this.events){
+                if(this.events.hasOwnProperty(key)&&key===attr)
+                delete this.events[key];
+            }
+        }
+        Event.prototype.emit = function(attr, ...arg){
+            this.events[attr] && this.events[attr].forEach(function(item){
+                item(...arg);
+            })
+        }
+
+        let app1 = new Observer({
+            name: 'youngwind',
+            age: 25
+        });
+
+        let app2 = new Observer({
+            university: 'bupt',
+            major: 'computer',
+            address: {
+                city: "beijing",
+                email:"123"
+            }
+        });
+        app1.data.name = {
+            lastName: 'liang',
+            firstName: 'shaofeng'
+        };
+        // 你需要实现 $watch 这个 API
+        app1.$watch('age', function(oldVal,newVal) {
+            console.log(`我的年纪变了，原来是：${oldVal}, 现在已经是：${newVal}岁了`)
+        });
+
+//        app1.data.name // 你访问了 name
+//        app1.data.age = 100;  // 你设置了 age，新的值为100
+//        app2.data.university ;// 你访问了 university
+//        app2.data.major = 'science' ; // 你设置了 major，新的值为 science
+        app1.data.name.lastName;
+        // 这里还需要输出 '你访问了 lastName '
+        app1.data.name.firstName = 'lalala';
+        // 这里还需要输出 '你设置了firstName, 新的值为 lalala'
+
+        app1.data.age = 100; // 输出：'我的年纪变了，现在已经是100岁了'
+    }
+</script>
+</body>
+</html>
