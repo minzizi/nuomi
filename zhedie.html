@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        input{
+            display:none;
+        }
+        label{
+            display:block;
+            /*height:50px;*/
+            width:400px;
+            background:#aed;
+            border-radius:2px;
+            padding-left:10px;
+            border:1px solid #6a9;
+        }
+        span{
+            width:400px;
+            height:0;
+            display:none;
+            background:#ddd;
+            padding-left:10px;
+            border-radius:2px;
+            border:1px solid #aaa;
+            transition:all .5s;
+            overflow:hidden;
+        }
+        input:checked+label+span{
+            display:block;
+            height:200px;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <input type="radio" id="r1" name="rd">
+    <label for="r1">Collapsible Group Item #1</label>
+    <span class="collapse">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.  dolor brunch.-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</span>
+    <input type="radio" id="r2" name="rd">
+    <label for="r2">Collapsible Group Item #2</label>
+    <span class="collapse">Anim pariatur cliche d high life accusamus terry richardson ad squid. truck  coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</span>
+    <input type="radio" id="r3" name="rd">
+    <label for="r3">Collapsible Group Item #3</label>
+    <span class="collapse">Anim pariatur cliche  high life accusamus terry richardson ad squid. et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</span>
+</div>
+</body>
+</html>
