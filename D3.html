@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /*body,html{*/
+            /*heigth:100%;*/
+            /*width:100%;*/
+            /*margin:0;*/
+            /*padding:0;*/
+        /*}*/
+        .stage{
+            with:1000px;
+            height:500px;
+            background:#ddd;
+            perspective:800px;
+            margin:0 auto;
+            /*position:relative;*/
+            /*top:50%;*/
+            /*margin-top:-250px;*/
+        }
+        .container{
+            transform-style:preserve-3d;
+            position:absolute;
+            width:300px;
+            height:300px;
+            top:50%;
+            left:50%;
+            margin-top:-150px;
+            margin-left:-150px;
+        }
+        .img{
+            width:300px;
+            height:300px;
+            position:absolute;
+        }
+        .img:nth-child(1){
+            transform:rotateY(0deg) translateZ(300px);
+        }
+        .img:nth-child(2){
+            transform:rotateY(60deg) translateZ(300px);
+        }
+        .img:nth-child(3){
+            transform:rotateY(120deg) translateZ(300px);
+        }
+        .img:nth-child(4){
+            transform:rotateY(180deg) translateZ(300px);
+        }
+        .img:nth-child(5){
+            transform:rotateY(240deg) translateZ(300px);
+        }
+        .img:nth-child(6){
+            transform:rotateY(300deg) translateZ(300px);
+        }
+        .arow{
+            position:absolute;
+            diaplay:block;
+            width:50px;
+            height:50px;
+            top:50%;
+            margin-top:-25px;
+            inline-height:50px;
+            font-size: 56px;
+            font-weight: 700;
+            /*text-align:center;*/
+            cursor:pointer;
+            color:#fff;
+        }
+        #pre{
+            left:30px;
+        }
+        #next{
+            right:30px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    window.onload=function(){
+        var timer=null;
+        var container=document.getElementsByClassName("container")[0];
+        var pre=document.getElementById("pre");
+        var next=document.getElementById("next");
+        timer=setInterval(function(){
+            container.style.transform='rotateY('+angle()+'deg)';
+        },1000);
+        function angle(){
+            var rotateY=container.style.transform;
+            var angle=0;
+            if(rotateY.length==13){
+                angle=60;
+            }else if(rotateY.length==14){
+                angle=120;
+            }else if(rotateY.length==15){
+                angle=parseInt(container.style.transform.slice(8,11));
+                if(angle==300){
+                    angle=0;
+                }else{
+                    angle+=60;
+                }
+            }
+            return angle;
+        }
+        pre.onmouseover=next.onmouseover=function(){
+            clearInterval(timer);
+            timer=null;
+        }
+        pre.onmouseout=next.onmouseout=function(){
+            timer=setInterval(function(){
+                container.style.transform='rotateY('+angle()+'deg)';
+            },1000);
+        }
+        pre.onclick=function(){
+            if(angle()==60){
+                container.style.transform="rotateY(300deg)";
+            }else if(angle()==0){
+                container.style.transform="rotateY(240deg)";
+            } else{
+                var deg=parseInt(angle())-120;
+                container.style.transform='rotateY('+deg+'deg)';
+            }
+        }
+        next.onclick=function(){
+            container.style.transform='rotateY('+angle()+'deg)';
+        }
+    }
+</script>
+<div class="stage">
+    <div class="container">
+        <img class="img" src="img/1.jpg">
+        <img class="img" src="img/2.jpg">
+        <img class="img" src="img/3.jpg">
+        <img class="img" src="img/4.jpg">
+        <img class="img" src="img/5.jpg">
+        <img class="img" src="img/6.jpg">
+    </div>
+    <span class="arow" id="pre"> < </span>
+    <span class="arow" id="next"> > </span>
+</div>
+</body>
+</html>
